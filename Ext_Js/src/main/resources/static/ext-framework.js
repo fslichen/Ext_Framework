@@ -24,9 +24,9 @@ function rows(columnNames, responseJson) {
 function columns(columnNames, columnAliases) {
 	columnAliases = columnAliases == null ? columnNames : columnAliases;
 	var columns = new Array();
-	columns.push({header : 'ID', id : 'id', width: 64, dataIndex: 'id'});
+	columns.push({id : 'id', dataIndex: 'id', header : 'ID', width: 64});
 	for (var i = 0; i < columnNames.length; i++) {
-		columns.push({header : columnAliases[i], width: 128, dataIndex: columnNames[i]});
+		columns.push({dataIndex: columnNames[i], header : columnAliases[i], width: 128});
 	}
 	return columns;
 }
