@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"
+	rel="stylesheet" />
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+<script type="text/javascript">
+Ext.onReady (function () {
+	// Create Sample Data
+	var anyData = [
+	    [1, 'Monkey D Luffy','Captain','I will become the pirate king'],
+	    [2, 'Roronoa Zoro','Swordman','Become the greatest swordman'],
+	    [3, 'Sanji','Cook','Find all blue'],
+	    [4, 'Usopp','Sniper','Become the greatest warrior'],
+	    [5, 'Nami','Navigator','Draw map of the world']
+	];
+	// Create Data Store
+	var anyStore = new Ext.data.SimpleStore({
+	    fields: [
+	        {name : 'id', type : 'int'},
+	        {name : 'name'},
+	        {name : 'position'},
+	        {name : 'ambition'}
+	    ]
+	});
+	// Load Data
+	anyStore.loadData(anyData);
+	// Create Grid
+	var anyGrid = new Ext.grid.GridPanel({
+	    store : anyStore,
+	    columns : [
+	        {id :'id',header: 'ID', width: 30, sortable: true, dataIndex: 'id'},
+	        {header : 'Name', width: 100, dataIndex: 'name'},
+	        {header : 'Position', width: 100, dataIndex: 'position'},
+	        {header : 'Ambition', width: 250, dataIndex: 'ambition'}
+	    ],
+	    stripeRows: true,
+	    height:180,
+	    width:500,
+	    title:'Evolution'
+	});
+	// Render Gird to HTML
+	anyGrid.render('anyGrid');        
+});
+</script>
+</head>
+<body>
+	<div id="anyGrid"></div>
+</body>
+</html>
