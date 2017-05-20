@@ -1,6 +1,3 @@
-var panel;
-var grid;
-
 function getFields(columnNames) {
 	var fields = new Array();
 	fields.push({name : 'id', type : 'int'});
@@ -36,7 +33,7 @@ function getColumns(columnNames, columnAliases) {
 }
 
 // Collect columnNames within responseJson and print columnAliases under target.
-function setGrid(columnNames, responseJson, columnAliases, title) {
+function setGrid(columnNames, responseJson, columnAliases) {
 	// Data
 	fields = getFields(columnNames);
 	var store = new Ext.data.SimpleStore({
@@ -44,16 +41,18 @@ function setGrid(columnNames, responseJson, columnAliases, title) {
 	});
 	store.loadData(getRows(columnNames, responseJson));
 	// Grid
-	if (grid == null) {
-		grid = new Ext.grid.GridPanel({
-			store : store,
-			columns : getColumns(columnNames, columnAliases),
-			stripeRows : true,
-			title : title == null ? 'Ext-Framework' : title,
-			width : fullWidth(),
-			height : fullHeight(),
-		});
+	if (grid != null) {
+		removeFromContainer(grid);
 	}
+	grid = new Ext.grid.GridPanel({
+		store : store,
+		columns : getColumns(columnNames, columnAliases),
+		stripeRows : true,
+		title : gridTitle == null ? 'Ext-Framework' : gridTitle,
+		width : fullWidth(),
+		height : fullHeight(),
+	});
+	add2Container(grid);
 }
 
 function add2Container(item) {
@@ -65,14 +64,13 @@ function removeFromContainer(item) {
 }
 
 // Send requestJson to url, print columnNames or columnAliases under target.
-function post(requestJson, url, columnNames, columnAliases, title) {
+function post() {
 	Ext.Ajax.request({
 		url : url,// Example : /post
-		jsonData: requestJson,// Example : {name : 'Chen'}
+		jsonData: requestData,// Example : {name : 'Chen'}. jsonData is not a json string.
 		success: function(responseJson) {
 			var responseJson = responseJson.responseText;
-			setGrid(columnNames, responseJson, columnAliases, title);
-			add2Container(grid);
+			setGrid(columnNames, responseJson, columnAliases);
 		},
 		failure: function() {
 			alert('Failure');
@@ -100,38 +98,54 @@ function addPanel() {
 	return panel;
 }
 
-function addButton(buttonName, panel) {
+function addSubmitButton(buttonName, panel) {
 	var button = Ext.create('Ext.Button', {
 	    text : buttonName,
 	    handler : function() {
-	        alert('Did you just click the button?');
+	        post();
 	    }
 	});
 	panel.add(button);
 }
 
-function addTextField(textFieldName, textFieldAlias, panel) {
+function addTextField(textFieldId, textFieldAlias, panel) {
 	var textField = Ext.create('Ext.form.field.Text', {
         fieldLabel: textFieldAlias,
-        name: textFieldName,
-        itemId: textFieldName,
+        name: textFieldId,
+        itemId: textFieldId,
         autofocus: true,
         enableKeyEvents: true,
         labelAlign: 'right',
         labelWidth: 64,
         labelStyle: 'font-size: 16px;',
-        width: 256
+        width: 256,
+        listeners: {
+        	blur: function() {
+        		requestData[this.itemId] = this.value;
+        	}
+        }
     });
 	panel.add(textField);
 }
 
+var url;
+var grid;
 var container;
+var gridTitle;
+var columnNames;
+var requestData;
+var columnAliases;
 
-function run(title) {
+function run(containerTitle, urlInput, columnNamesInput, columnAliasesInput, gridTitleInput) {
 	container = Ext.create('Ext.panel.Panel', {
 	    renderTo: Ext.getBody(),
 	    width: fullWidth(),
 	    height: fullHeight(),
-	    title: title
+	    title: containerTitle
 	});
+	requestData = new Array();
+	url = urlInput;
+	columnNames = columnNamesInput;
+	columnAliases = columnAliasesInput;
+	gridTitle = gridTitleInput;
 }
