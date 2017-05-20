@@ -67,12 +67,12 @@ function removeFromContainer(item) {
 function post() {
 	Ext.Ajax.request({
 		url : url,// Example : /post
-		jsonData: requestData,// Example : {name : 'Chen'}. jsonData is not a json string.
-		success: function(responseJson) {
+		jsonData : requestData,// Example : {name : 'Chen'}. jsonData is not a json string.
+		success : function(responseJson) {
 			var responseJson = responseJson.responseText;
 			setGrid(columnNames, responseJson, columnAliases);
 		},
-		failure: function() {
+		failure : function() {
 			alert('Failure');
 		}
 	});
@@ -143,7 +143,7 @@ function run(containerTitle, urlInput, columnNamesInput, columnAliasesInput, gri
 	    height: fullHeight(),
 	    title: containerTitle
 	});
-	requestData = new Array();
+	requestData = {};
 	url = urlInput;
 	columnNames = columnNamesInput;
 	columnAliases = columnAliasesInput;
