@@ -9,23 +9,19 @@
 <script type="text/javascript" src="ext-framework.js"></script>
 <script type="text/javascript">
 Ext.onReady (function () {
+	run('Evolution Container');
+	var panel = addPanel();																																																																																																																																											
+	addTextField('id', 'ID', panel);
+	addTextField('name', 'Name', panel);
+	addButton('Submit', panel);		
 	var columnNames = ['name', 'position', 'ambition'];
 	var columnAliases = ['Name', 'Position', 'Ambition'];
-	Ext.Ajax.request({
-	       url: '/post', 
-	       jsonData: {name : 'Chen'},
-	       success: function(responseJson) {
-	    	   var responseJson = responseJson.responseText;
-			   print(columnNames, responseJson, columnAliases, 'anyGrid', 'Evolution');
-	       },
-	       failure: function() {
-	    	   alert('Failure');
-	       }
-	    });
-});
+	post({name : 'Chen'}, '/post', columnNames, columnAliases, 'Evolution Grid');
+	post({name : 'Chen'}, '/post', columnNames, columnAliases, 'Evolution Grid');
+	post({name : 'Chen'}, '/post', columnNames, columnAliases, 'Evolution Grid');
+});																																																																																						
 </script>
-</head>
+</head>																																																																																																																																																																																																							
 <body>
-	<div id="anyGrid"></div>
 </body>
 </html>
