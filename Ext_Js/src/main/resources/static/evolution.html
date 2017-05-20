@@ -9,10 +9,19 @@
 <script type="text/javascript" src="ext-framework.js"></script>
 <script type="text/javascript">
 Ext.onReady (function () {
-	var columnNames = ['id', 'name', 'position', 'ambition'];
-	var responseJson = [{id : 0, name : 'Chen', position : 'CS', ambition : 'Architect'}, 
-		{id : 1, name : 'Ling', position : 'CE', ambition : 'Ph.D'}];
-	print(columnNames, responseJson, 'anyGrid', 1600, 1000, 'Evolution');
+	var columnNames = ['name', 'position', 'ambition'];
+	var columnAliases = ['Name', 'Position', 'Ambition'];
+	Ext.Ajax.request({
+	       url: '/post', 
+	       jsonData: {name : 'Chen'},
+	       success: function(responseJson) {
+	    	   var responseJson = responseJson.responseText;
+			   print(columnNames, responseJson, columnAliases, 'anyGrid', 'Evolution');
+	       },
+	       failure: function() {
+	    	   alert('Failure');
+	       }
+	    });
 });
 </script>
 </head>

@@ -1,16 +1,18 @@
-function columns(columnNames) {
-	// Create Columns
-	var columns = new Array();
+function fields(columnNames) {
+	var fields = new Array();
+	fields.push({name : 'id', type : 'int'});
 	for (var i = 0; i < columnNames.length; i++) {
-		columns.push({header : columnNames[i], width: 250, dataIndex: columnNames[i]});
+		fields.push({name : columnNames[i]});
 	}
-	return columns;
+	return fields;
 }
+
 function rows(columnNames, responseJson) {
-	// Create Rows
 	var rows = new Array();
+	responseJson = JSON.parse(responseJson);
 	for (var i = 0; i < responseJson.length; i++) {
 		var row = new Array();
+		row.push(i);
 		for (var j = 0; j < columnNames.length; j++) {
 			row.push(responseJson[i][columnNames[j]]);
 		}
@@ -18,23 +20,22 @@ function rows(columnNames, responseJson) {
 	}
 	return rows;
 }
-function fields(columnNames) {
-	var fields = new Array();
+
+function columns(columnNames, columnAliases) {
+	columnAliases = columnAliases == null ? columnNames : columnAliases;
+	var columns = new Array();
+	columns.push({header : 'ID', id : 'id', width: 64, dataIndex: 'id'});
 	for (var i = 0; i < columnNames.length; i++) {
-		fields.push({name : columnNames[i]});
+		columns.push({header : columnAliases[i], width: 128, dataIndex: columnNames[i]});
 	}
-	return fields;
+	return columns;
 }
-function defaultHeight(height) {
-	return height == null ? 1500 : height;
-}
-function defaultWidth(width) {
-	return width == null ? 1500 : width;
-}
+
 function defaultTitle(title) {
 	return title == null ? 'Ext-Framework' : title;
 }
-function print(columnNames, responseJson, target, height, width, title) {
+
+function print(columnNames, responseJson, columnAliases, target, title) {
 	// Data
 	fields = fields(columnNames);
 	var store = new Ext.data.SimpleStore({
@@ -42,14 +43,15 @@ function print(columnNames, responseJson, target, height, width, title) {
 	});
 	store.loadData(rows(columnNames, responseJson));
 	// Grid
-	var anyGrid = new Ext.grid.GridPanel({
+	var viewSize = Ext.getBody().getViewSize();
+	var grid = new Ext.grid.GridPanel({
 	    store : store,
-	    columns : columns(columnNames),
+	    columns : columns(columnNames, columnAliases),
 	    stripeRows : true,
-	    height : defaultHeight(height),
-	    width : defaultWidth(width),
-	    title : defaultTitle(title)
+	    title : defaultTitle(title),
+	    width : viewSize.width,
+	    height : viewSize.height,
 	});
 	// Render
-	anyGrid.render(target);        
+	grid.render(target);        
 }
