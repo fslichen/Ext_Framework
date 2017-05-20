@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"
+	rel="stylesheet" />
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+<script type="text/javascript">
+function columns(columnNames) {
+	// Create Columns
+	var columns = new Array();
+	for (var i = 0; i < columnNames.length; i++) {
+		columns.push({header : columnNames[i], width: 250, dataIndex: columnNames[i]});
+	}
+	return columns;
+}
+function rows(columnNames) {
+	var responseJson = [{id : 0, name : 'Chen', position : 'CS', ambition : 'Architect'}, 
+		{id : 1, name : 'Ling', position : 'CE', ambition : 'Ph.D'}];
+	// Create Rows
+	var rows = new Array();
+	for (var i = 0; i < responseJson.length; i++) {
+		var row = new Array();
+		for (var j = 0; j < columnNames.length; j++) {
+			row.push(responseJson[i][columnNames[j]]);
+		}
+		rows.push(row);
+	}
+	return rows;
+}
+function fields(columnNames) {
+	var fields = new Array();
+	for (var i = 0; i < columnNames.length; i++) {
+		fields.push({name : columnNames[i]});
+	}
+	return fields;
+}
+Ext.onReady (function () {
+	var columnNames = ['id', 'name', 'position', 'ambition'];
+	// Create Data Store
+	fields = fields(columnNames);
+	var anyStore = new Ext.data.SimpleStore({
+	    fields : fields
+	});
+	// Load Data
+	anyStore.loadData(rows(columnNames));
+	// Create Grid
+	var anyGrid = new Ext.grid.GridPanel({
+	    store : anyStore,
+	    columns : columns(columnNames),
+	    stripeRows: true,
+	    height:1500,
+	    width:1500,
+	    title:'Evolution'
+	});
+	// Render Gird to HTML
+	anyGrid.render('anyGrid');        
+});
+</script>
+</head>
+<body>
+	<div id="anyGrid"></div>
+</body>
+</html>
