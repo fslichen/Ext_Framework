@@ -105,7 +105,7 @@ function addSubmitButton(label, panel) {
 	panel.add(button);
 }
 
-function addDatePicker(id, label, panel) {
+function addDatePicker(id, label, controlPanel, toolPanel) {
 	var dateButton = Ext.create('Ext.Button', {
 		text : label,
 		handler : function() {
@@ -113,15 +113,15 @@ function addDatePicker(id, label, panel) {
 				floating : false,// Make it false otherwise the data picker won't show up.
 				handler: function(configuration, date) {
 					var date = Ext.Date.format(date, 'Y-m-d');// Year Month and Day
-					alert(date);
+					set(id, date);
 					requestData[id] = date;
-					panel.remove(datePicker);
+					toolPanel.remove(datePicker);
 				}
 			});
-			panel.add(datePicker);
+			toolPanel.add(datePicker);
 		}
 	});
-	panel.add(dateButton);
+	controlPanel.add(dateButton);
 }
 
 function addTextField(id, label, panel) {
@@ -136,7 +136,7 @@ function addTextField(id, label, panel) {
         labelStyle : 'font-size: 16px;',
         width : 256,
         listeners: {
-        	blur: function() {
+        	change: function() {
         		requestData[id] = this.value;
         	}
         }
@@ -144,8 +144,25 @@ function addTextField(id, label, panel) {
 	panel.add(textField);
 }
 
-function find() {
-	Ext.ComponentQuery.query('textfield[name=firstName]');
+function find(id) {
+	return Ext.ComponentQuery.query('textfield[itemId=' + id + ']')[0];
+}
+
+function set(id, value) {
+	find(id).setValue(value);
+}
+
+function addResetButton(label, panel) {
+	var button = Ext.create('Ext.Button', {
+	    text : label,
+	    handler : function() {
+	    	var components = Ext.ComponentQuery.query('textfield');
+	    	for (var i in components) {
+	    		components[i].setValue('');
+	    	}
+	    }
+	});
+	panel.add(button);
 }
 
 var url;

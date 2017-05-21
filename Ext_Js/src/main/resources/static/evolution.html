@@ -10,14 +10,18 @@
 <script type="text/javascript">
 Ext.onReady (function () {
 	var columnNames = ['name', 'position', 'ambition'];
-	var columnAliases = ['Name', 'Position', 'Ambition'];
-	run('Evolution Container', '/post', columnNames, columnAliases, 'Evolution Grid');
-	var panel = addPanel('Evolution Commander', true);																																																																																																																																											
+	var columnLabels = ['Name', 'Position', 'Ambition'];
+	run('Evolution Container', '/post', columnNames, columnLabels, 'Evolution Grid');
+	var panel = addPanel('Evolution Commander', true);	
+	var toolPanel = addPanel('Date', true);	
 	addTextField('id', 'ID', panel);
 	addTextField('name', 'Name', panel);
-	addDatePicker('beginDate', 'Begin', panel);
-	addDatePicker('endDate', 'End', panel);
-	addSubmitButton('Submit', panel);		
+	addTextField('beginDate', 'Begin', panel);
+	addDatePicker('beginDate', 'Date', panel, toolPanel);
+	addTextField('endDate', 'End', panel);
+	addDatePicker('endDate', 'Date', panel, toolPanel);
+	addSubmitButton('Submit', panel);	
+	addResetButton('Reset', panel);
 	loadData();
 });																																																																																						
 </script>
