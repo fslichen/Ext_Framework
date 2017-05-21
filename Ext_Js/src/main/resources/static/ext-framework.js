@@ -64,7 +64,7 @@ function removeFromContainer(item) {
 }
 
 // Send requestJson to url, print columnNames or columnAliases under target.
-function post() {
+function loadData() {
 	Ext.Ajax.request({
 		url : url,// Example : /post
 		jsonData : requestData,// Example : {name : 'Chen'}. jsonData is not a json string.
@@ -88,11 +88,11 @@ function fullHeight() {
 	return viewSize.height;
 }
 
-function addPanel() {
+function addPanel(panelTitle, height) {
 	var panel = Ext.create('Ext.panel.Panel', {
-	    width: fullWidth(),
-	    height: 100,
-	    title: 'Hello'
+	    width : fullWidth(),
+	    height : height == null ? 100 : height,
+	    title : panelTitle
 	});
 	add2Container(panel);
 	return panel;
@@ -102,7 +102,7 @@ function addSubmitButton(buttonName, panel) {
 	var button = Ext.create('Ext.Button', {
 	    text : buttonName,
 	    handler : function() {
-	        post();
+	    	loadData();
 	    }
 	});
 	panel.add(button);
@@ -110,15 +110,15 @@ function addSubmitButton(buttonName, panel) {
 
 function addTextField(textFieldId, textFieldAlias, panel) {
 	var textField = Ext.create('Ext.form.field.Text', {
-        fieldLabel: textFieldAlias,
-        name: textFieldId,
-        itemId: textFieldId,
-        autofocus: true,
-        enableKeyEvents: true,
-        labelAlign: 'right',
-        labelWidth: 64,
-        labelStyle: 'font-size: 16px;',
-        width: 256,
+        fieldLabel : textFieldAlias,
+        name : textFieldId,
+        itemId : textFieldId,
+        autofocus : true,
+        enableKeyEvents : true,
+        labelAlign : 'right',
+        labelWidth : 64,
+        labelStyle : 'font-size: 16px;',
+        width : 256,
         listeners: {
         	blur: function() {
         		requestData[this.itemId] = this.value;

@@ -12,11 +12,11 @@ Ext.onReady (function () {
 	var columnNames = ['name', 'position', 'ambition'];
 	var columnAliases = ['Name', 'Position', 'Ambition'];
 	run('Evolution Container', '/post', columnNames, columnAliases, 'Evolution Grid');
-	var panel = addPanel();																																																																																																																																											
+	var panel = addPanel('Evolution Commander');																																																																																																																																											
 	addTextField('id', 'ID', panel);
 	addTextField('name', 'Name', panel);
 	addSubmitButton('Submit', panel);		
-	post();
+	loadData();
 });																																																																																						
 </script>
 </head>																																																																																																																																																																																																							
