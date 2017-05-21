@@ -98,6 +98,7 @@ function addPanel(title, horizontal) {
 
 function addSubmitButton(label, panel) {
 	addButton(label, panel, function() {
+		set('pageIndex', 1);
     	loadData();
     });
 }
@@ -218,6 +219,6 @@ function run(containerTitle, urlInput, columnNamesInput, columnLabelsInput, grid
 	gridTitle = gridTitleInput;
 	pagination = {
 		pageIndex : 1,
-		pageSize : 10
+		pageSize : 20
 	};
 }
