@@ -1,4 +1,4 @@
-function getFields(columnNames) {
+function getFields() {
 	var fields = new Array();
 	fields.push({name : 'id', type : 'int'});
 	for (var i = 0; i < columnNames.length; i++) {
@@ -8,7 +8,7 @@ function getFields(columnNames) {
 }
 
 // Extract columnNames from responseJson.
-function getRows(columnNames, responseJson) {
+function getRows(responseJson) {
 	var rows = new Array();
 	responseJson = JSON.parse(responseJson);
 	for (var i = 0; i < responseJson.length; i++) {
@@ -22,31 +22,31 @@ function getRows(columnNames, responseJson) {
 	return rows;
 }
 
-function getColumns(columnNames, columnAliases) {
-	columnAliases = columnAliases == null ? columnNames : columnAliases;
+function getColumns() {
+	columnLabels = columnLabels == null ? columnNames : columnLabels;
 	var columns = new Array();
 	columns.push({id : 'id', dataIndex: 'id', header : 'ID', width: 64});
 	for (var i = 0; i < columnNames.length; i++) {
-		columns.push({dataIndex: columnNames[i], header : columnAliases[i], width: 128});
+		columns.push({dataIndex: columnNames[i], header : columnLabels[i], width: 128});
 	}
 	return columns;
 }
 
-// Collect columnNames within responseJson and print columnAliases under target.
-function setGrid(columnNames, responseJson, columnAliases) {
+// Collect columnNames within responseJson and print columnLabels under target.
+function setGrid(responseJson) {
 	// Data
-	fields = getFields(columnNames);
+	fields = getFields();
 	var store = new Ext.data.SimpleStore({
 	    fields : fields
 	});
-	store.loadData(getRows(columnNames, responseJson));
+	store.loadData(getRows(responseJson));
 	// Grid
 	if (grid != null) {
 		removeFromContainer(grid);
 	}
 	grid = new Ext.grid.GridPanel({
 		store : store,
-		columns : getColumns(columnNames, columnAliases),
+		columns : getColumns(),
 		stripeRows : true,
 		title : gridTitle == null ? 'Ext-Framework' : gridTitle
 	});
@@ -61,14 +61,14 @@ function removeFromContainer(item) {
 	container.remove(item);
 }
 
-// Send requestJson to url, print columnNames or columnAliases under target.
+// Send requestJson to url, print columnNames or columnLabels under target.
 function loadData() {
 	Ext.Ajax.request({
 		url : url,// Example : /post
 		jsonData : requestData,// Example : {name : 'Chen'}. jsonData is not a json string.
 		success : function(responseJson) {
 			var responseJson = responseJson.responseText;
-			setGrid(columnNames, responseJson, columnAliases);
+			setGrid(responseJson);
 		},
 		failure : function() {
 			alert('Failure');
@@ -150,9 +150,9 @@ var container;
 var gridTitle;
 var columnNames;
 var requestData;
-var columnAliases;
+var columnLabels;
 
-function run(containerTitle, urlInput, columnNamesInput, columnAliasesInput, gridTitleInput) {
+function run(containerTitle, urlInput, columnNamesInput, columnLabelsInput, gridTitleInput) {
 	container = Ext.create('Ext.panel.Panel', {
 	    renderTo: Ext.getBody(),
 	    title: containerTitle
@@ -160,6 +160,6 @@ function run(containerTitle, urlInput, columnNamesInput, columnAliasesInput, gri
 	requestData = {};
 	url = urlInput;
 	columnNames = columnNamesInput;
-	columnAliases = columnAliasesInput;
+	columnLabels = columnLabelsInput;
 	gridTitle = gridTitleInput;
 }
