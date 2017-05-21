@@ -48,9 +48,7 @@ function setGrid(columnNames, responseJson, columnAliases) {
 		store : store,
 		columns : getColumns(columnNames, columnAliases),
 		stripeRows : true,
-		title : gridTitle == null ? 'Ext-Framework' : gridTitle,
-		width : fullWidth(),
-		height : fullHeight(),
+		title : gridTitle == null ? 'Ext-Framework' : gridTitle
 	});
 	add2Container(grid);
 }
@@ -90,7 +88,6 @@ function fullHeight() {
 
 function addPanel(title, horizontal) {
 	var panel = Ext.create('Ext.panel.Panel', {
-	    width : fullWidth(),
 	    title : title,
 	    layout: horizontal == true ? 'hbox' : 'vbox'
 	});
