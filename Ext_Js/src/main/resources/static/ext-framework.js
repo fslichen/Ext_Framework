@@ -11,7 +11,8 @@ function getFields() {
 function getRows(responseJson) {
 	var rows = new Array();
 	responseJson = JSON.parse(responseJson);
-	for (var i = 0; i < responseJson.length; i++) {
+	var pageIndexes = getPageIndexes(responseJson.length);
+	for (var i = pageIndexes[0]; i < pageIndexes[1]; i++) {
 		var row = new Array();
 		row.push(i);
 		for (var j = 0; j < columnNames.length; j++) {
@@ -96,35 +97,27 @@ function addPanel(title, horizontal) {
 }
 
 function addSubmitButton(label, panel) {
-	var button = Ext.create('Ext.Button', {
-	    text : label,
-	    handler : function() {
-	    	loadData();
-	    }
-	});
-	panel.add(button);
+	addButton(label, panel, function() {
+    	loadData();
+    });
 }
 
-function addDatePicker(id, label, controlPanel, toolPanel) {
-	var dateButton = Ext.create('Ext.Button', {
-		text : label,
-		handler : function() {
-			var datePicker = Ext.create('Ext.menu.DatePicker', {
-				floating : false,// Make it false otherwise the data picker won't show up.
-				handler: function(configuration, date) {
-					var date = Ext.Date.format(date, 'Y-m-d');// Year Month and Day
-					set(id, date);
-					requestData[id] = date;
-					toolPanel.remove(datePicker);
-				}
-			});
-			toolPanel.add(datePicker);
-		}
+function addDatePicker(id, label, controlPanel, toolPanel) {	
+	addButton(label, controlPanel, function() {
+		var datePicker = Ext.create('Ext.menu.DatePicker', {
+			floating : false,// Make it false otherwise the data picker won't show up.
+			handler: function(configuration, date) {
+				var date = Ext.Date.format(date, 'Y-m-d');// Year Month and Day
+				set(id, date);
+				requestData[id] = date;
+				toolPanel.remove(datePicker);
+			}
+		});
+		toolPanel.add(datePicker);
 	});
-	controlPanel.add(dateButton);
 }
 
-function addTextField(id, label, panel) {
+function addTextField(id, label, panel, method) {
 	var textField = Ext.create('Ext.form.field.Text', {
         fieldLabel : label,
         name : id,
@@ -135,40 +128,80 @@ function addTextField(id, label, panel) {
         labelWidth : 64,
         labelStyle : 'font-size: 16px;',
         width : 256,
-        listeners: {
-        	change: function() {
-        		requestData[id] = this.value;
-        	}
+        listeners : {
+        	change : method
         }
     });
 	panel.add(textField);
+}
+
+function addForm(id, label, panel) {
+	addTextField(id, label, panel, function() {
+		requestData[id] = this.value;
+	});
 }
 
 function find(id) {
 	return Ext.ComponentQuery.query('textfield[itemId=' + id + ']')[0];
 }
 
+function getValue(id) {
+	return find(id).getValue();
+}
+
 function set(id, value) {
 	find(id).setValue(value);
 }
 
-function addResetButton(label, panel) {
+function addButton(label, panel, method) {
 	var button = Ext.create('Ext.Button', {
 	    text : label,
-	    handler : function() {
-	    	var components = Ext.ComponentQuery.query('textfield');
-	    	for (var i in components) {
-	    		components[i].setValue('');
-	    	}
-	    }
+	    handler : method
 	});
 	panel.add(button);
+}
+
+function addResetButton(label, panel) {
+	addButton(label, panel, function() {
+    	var components = Ext.ComponentQuery.query('textfield');
+    	for (var i in components) {
+    		components[i].setValue('');
+    	}
+    });
+}
+
+function getPageIndexes(rowCount) {
+	var pageSize = pagination.pageSize;
+	var pageIndex = pagination.pageIndex;
+	pageIndex = pageIndex < 1 ? 1 : pageIndex;
+	return [(pageIndex - 1) * pageSize, Math.min(pageIndex * pageSize, rowCount)];
+}
+
+function addPagination(panel) {
+	addButton('Previous', panel, function() {
+    	var pageIndex = parseInt(pagination.pageIndex) - 1;
+    	pagination.pageIndex = pageIndex < 1 ? 1 : pageIndex;
+    	set('pageIndex', pagination.pageIndex);
+    	loadData();
+    });
+	addButton('Next', panel, function() {
+    	pagination.pageIndex = parseInt(pagination.pageIndex) + 1;
+    	set('pageIndex', pagination.pageIndex);
+    	loadData();
+    });
+	addButton('Go', panel, function() {
+    	loadData();
+    });
+	addTextField('pageIndex', 'Page', panel, function() {
+		pagination.pageIndex = parseInt(getValue('pageIndex'));
+	});
 }
 
 var url;
 var grid;
 var container;
 var gridTitle;
+var pagination;
 var columnNames;
 var requestData;
 var columnLabels;
@@ -183,4 +216,8 @@ function run(containerTitle, urlInput, columnNamesInput, columnLabelsInput, grid
 	columnNames = columnNamesInput;
 	columnLabels = columnLabelsInput;
 	gridTitle = gridTitleInput;
+	pagination = {
+		pageIndex : 1,
+		pageSize : 10
+	};
 }

@@ -13,15 +13,16 @@ Ext.onReady (function () {
 	var columnLabels = ['Name', 'Position', 'Ambition'];
 	run('Evolution Container', '/post', columnNames, columnLabels, 'Evolution Grid');
 	var panel = addPanel('Evolution Commander', true);	
-	var toolPanel = addPanel('Date', true);	
-	addTextField('id', 'ID', panel);
-	addTextField('name', 'Name', panel);
-	addTextField('beginDate', 'Begin', panel);
+	var toolPanel = addPanel('Tool', true);	
+	addForm('id', 'ID', panel);
+	addForm('name', 'Name', panel);
+	addForm('beginDate', 'Begin', panel);
 	addDatePicker('beginDate', 'Date', panel, toolPanel);
-	addTextField('endDate', 'End', panel);
+	addForm('endDate', 'End', panel);
 	addDatePicker('endDate', 'Date', panel, toolPanel);
 	addSubmitButton('Submit', panel);	
 	addResetButton('Reset', panel);
+	addPagination(toolPanel);
 	loadData();
 });																																																																																						
 </script>
