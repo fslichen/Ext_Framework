@@ -88,11 +88,11 @@ function fullHeight() {
 	return viewSize.height;
 }
 
-function addPanel(panelTitle, height) {
+function addPanel(title, horizontal) {
 	var panel = Ext.create('Ext.panel.Panel', {
 	    width : fullWidth(),
-	    height : height == null ? 100 : height,
-	    title : panelTitle
+	    title : title,
+	    layout: horizontal == true ? 'hbox' : 'vbox'
 	});
 	add2Container(panel);
 	return panel;
@@ -106,6 +106,25 @@ function addSubmitButton(buttonName, panel) {
 	    }
 	});
 	panel.add(button);
+}
+
+function addDatePicker(id, label, panel) {
+	var dateButton = Ext.create('Ext.Button', {
+		text : label,
+		handler : function() {
+			var datePicker = Ext.create('Ext.menu.DatePicker', {
+				floating : false,// Make it false otherwise the data picker won't show up.
+				handler: function(configuration, date) {
+					var date = Ext.Date.format(date, 'Y-m-d');// Year Month and Day
+					alert(date);
+					requestData[id] = date;
+					panel.remove(datePicker);
+				}
+			});
+			panel.add(datePicker);
+		}
+	});
+	panel.add(dateButton);
 }
 
 function addTextField(textFieldId, textFieldAlias, panel) {
@@ -139,8 +158,6 @@ var columnAliases;
 function run(containerTitle, urlInput, columnNamesInput, columnAliasesInput, gridTitleInput) {
 	container = Ext.create('Ext.panel.Panel', {
 	    renderTo: Ext.getBody(),
-	    width: fullWidth(),
-	    height: fullHeight(),
 	    title: containerTitle
 	});
 	requestData = {};

@@ -12,9 +12,11 @@ Ext.onReady (function () {
 	var columnNames = ['name', 'position', 'ambition'];
 	var columnAliases = ['Name', 'Position', 'Ambition'];
 	run('Evolution Container', '/post', columnNames, columnAliases, 'Evolution Grid');
-	var panel = addPanel('Evolution Commander');																																																																																																																																											
+	var panel = addPanel('Evolution Commander', true);																																																																																																																																											
 	addTextField('id', 'ID', panel);
 	addTextField('name', 'Name', panel);
+	addDatePicker('beginDate', 'Begin', panel);
+	addDatePicker('endDate', 'End', panel);
 	addSubmitButton('Submit', panel);		
 	loadData();
 });																																																																																						
