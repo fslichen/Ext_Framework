@@ -95,9 +95,9 @@ function addPanel(title, horizontal) {
 	return panel;
 }
 
-function addSubmitButton(buttonName, panel) {
+function addSubmitButton(label, panel) {
 	var button = Ext.create('Ext.Button', {
-	    text : buttonName,
+	    text : label,
 	    handler : function() {
 	    	loadData();
 	    }
@@ -124,11 +124,11 @@ function addDatePicker(id, label, panel) {
 	panel.add(dateButton);
 }
 
-function addTextField(textFieldId, textFieldAlias, panel) {
+function addTextField(id, label, panel) {
 	var textField = Ext.create('Ext.form.field.Text', {
-        fieldLabel : textFieldAlias,
-        name : textFieldId,
-        itemId : textFieldId,
+        fieldLabel : label,
+        name : id,
+        itemId : id,
         autofocus : true,
         enableKeyEvents : true,
         labelAlign : 'right',
@@ -137,11 +137,15 @@ function addTextField(textFieldId, textFieldAlias, panel) {
         width : 256,
         listeners: {
         	blur: function() {
-        		requestData[this.itemId] = this.value;
+        		requestData[id] = this.value;
         	}
         }
     });
 	panel.add(textField);
+}
+
+function find() {
+	Ext.ComponentQuery.query('textfield[name=firstName]');
 }
 
 var url;
