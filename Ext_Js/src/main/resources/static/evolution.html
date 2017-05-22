@@ -20,14 +20,18 @@ Ext.onReady (function () {
 	addDatePicker('beginDate', 'Date', panel, toolPanel);
 	addForm('endDate', 'End', panel);
 	addDatePicker('endDate', 'Date', panel, toolPanel);
-	addSubmitButton('Submit', panel);	
-	addResetButton('Reset', panel);
+	addSubmitButton('Submit', toolPanel);	
+	addResetButton('Reset', toolPanel);
 	addPagination(toolPanel);
 	loadData();
 	addBox('state', 'State', ['abbr', 'name'], [
         {"abbr":"AL", "name":"Alabama"},
         {"abbr":"AK", "name":"Alaska"},
         {"abbr":"AZ", "name":"Arizona"}
+    ], panel);
+	addBox('sex', 'Sex', ['abbr', 'name'], [
+        {"abbr":"M", "name":"Male"},
+        {"abbr":"F", "name":"Female"},
     ], panel);
 });																																																																																						
 </script>

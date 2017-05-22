@@ -6,16 +6,19 @@ function addBox(id, label, valueAndDisplayField, valueAndDisplayData, panel) {
 	var box = Ext.create('Ext.form.ComboBox', {
 		itemId : id,
 		labelWidth : 64,
+		width : 256,
+        labelAlign : 'right',
+        labelStyle : 'font-size: 16px;',
 		fieldLabel : label,
-	    store : options,
-	    queryMode : 'local',
-	    displayField : valueAndDisplayField[1],
-	    valueField : valueAndDisplayField[0],
-	    listeners: {
-	    		select: function(combo, record, index) {
-	    			requestData[id] = getValue(id);
-	    		}
-	    }
+		store : options,
+		queryMode : 'local',
+		displayField : valueAndDisplayField[1],
+		valueField : valueAndDisplayField[0],
+		listeners: {
+			select: function(combo, record, index) {
+				requestData[id] = getValue(id);
+			}
+		}
 	});
 	panel.add(box);
 }
@@ -120,7 +123,7 @@ function fullHeight() {
 function addPanel(title, horizontal) {
 	var panel = Ext.create('Ext.panel.Panel', {
 	    title : title,
-	    layout: horizontal == true ? 'hbox' : 'vbox'
+	    layout: 'column'
 	});
 	add2Container(panel);
 	return panel;
@@ -135,16 +138,22 @@ function addSubmitButton(label, panel) {
 
 function addDatePicker(id, label, controlPanel, toolPanel) {	
 	addButton(label, controlPanel, function() {
-		var datePicker = Ext.create('Ext.menu.DatePicker', {
-			floating : false,// Make it false otherwise the data picker won't show up.
-			handler: function(configuration, date) {
-				var date = Ext.Date.format(date, 'Y-m-d');// Year Month and Day
-				set(id, date);
-				requestData[id] = date;
-				toolPanel.remove(datePicker);
-			}
-		});
-		toolPanel.add(datePicker);
+		var existingDatePicker = find(id + 'DatePicker');
+		if (existingDatePicker == null) {
+			var datePicker = Ext.create('Ext.menu.DatePicker', {
+				itemId : id + 'DatePicker',
+				floating : false,// Make it false otherwise the data picker won't show up.
+				handler: function(configuration, date) {
+					var date = Ext.Date.format(date, 'Y-m-d');// Year Month and Day
+					set(id, date);
+					requestData[id] = date;
+					toolPanel.remove(datePicker); 
+				}
+			});
+			toolPanel.add(datePicker);
+		} else {
+			toolPanel.remove(existingDatePicker);
+		}
 	});
 }
 
@@ -173,7 +182,7 @@ function addForm(id, label, panel) {
 }
 
 function find(id) {
-	return Ext.ComponentQuery.query('textfield[itemId=' + id + ']')[0];
+	return Ext.ComponentQuery.query('[itemId=' + id + ']')[0];
 }
 
 function getValue(id) {
