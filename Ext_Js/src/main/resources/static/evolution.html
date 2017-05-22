@@ -24,6 +24,11 @@ Ext.onReady (function () {
 	addResetButton('Reset', panel);
 	addPagination(toolPanel);
 	loadData();
+	addBox('state', 'State', ['abbr', 'name'], [
+        {"abbr":"AL", "name":"Alabama"},
+        {"abbr":"AK", "name":"Alaska"},
+        {"abbr":"AZ", "name":"Arizona"}
+    ], panel);
 });																																																																																						
 </script>
 </head>																																																																																																																																																																																																							

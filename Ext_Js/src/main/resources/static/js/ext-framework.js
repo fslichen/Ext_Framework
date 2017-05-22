@@ -1,3 +1,33 @@
+function addBox(id, label, valueAndDisplayField, valueAndDisplayData, panel) {
+	var options = Ext.create('Ext.data.Store', {
+	    fields: valueAndDisplayField,
+	    data : valueAndDisplayData
+	});
+	var box = Ext.create('Ext.form.ComboBox', {
+		itemId : id,
+		labelWidth : 64,
+		fieldLabel : label,
+	    store : options,
+	    queryMode : 'local',
+	    displayField : valueAndDisplayField[1],
+	    valueField : valueAndDisplayField[0],
+	    listeners: {
+	    		select: function(combo, record, index) {
+	    			requestData[id] = getValue(id);
+	    		}
+	    }
+	});
+	panel.add(box);
+}
+
+function print(object) {
+	var attributes = new Array();
+	for (i in object) {
+		attributes.push(i);
+	}
+	alert(attributes);
+}
+
 function getFields() {
 	var fields = new Array();
 	fields.push({name : 'id', type : 'int'});
