@@ -174,20 +174,20 @@ function addResetButton(label, panel) {
 function getPageIndexes(rowCount) {
 	var pageSize = pagination.pageSize;
 	var pageIndex = pagination.pageIndex;
-	pageIndex = pageIndex < 1 ? 1 : pageIndex;
+	pageIndex = Math.max(1, pageIndex);
+	pageIndex = Math.min(Math.ceil(rowCount / pageSize), pageIndex);
+	pagination.pageIndex = pageIndex;
+	set('pageIndex', pageIndex);
 	return [(pageIndex - 1) * pageSize, Math.min(pageIndex * pageSize, rowCount)];
 }
 
 function addPagination(panel) {
 	addButton('Previous', panel, function() {
-    	var pageIndex = parseInt(pagination.pageIndex) - 1;
-    	pagination.pageIndex = pageIndex < 1 ? 1 : pageIndex;
-    	set('pageIndex', pagination.pageIndex);
+    	pagination.pageIndex = Math.max(1, parseInt(pagination.pageIndex) - 1);
     	loadData();
     });
 	addButton('Next', panel, function() {
     	pagination.pageIndex = parseInt(pagination.pageIndex) + 1;
-    	set('pageIndex', pagination.pageIndex);
     	loadData();
     });
 	addButton('Go', panel, function() {
