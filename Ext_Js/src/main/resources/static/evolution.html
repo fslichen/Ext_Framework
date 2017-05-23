@@ -12,26 +12,24 @@ Ext.onReady (function () {
 	var columnNames = ['name', 'position', 'ambition'];
 	var columnLabels = ['Name', 'Position', 'Ambition'];
 	run('Evolution Container', '/post', columnNames, columnLabels, 'Evolution Grid');
-	var panel = addPanel('Evolution Commander', true);	
-	var toolPanel = addPanel('Tool', true);	
+	var panel = addPanel('Evolution Commander');	
+	var toolPanel = addPanel('Tool');	
 	addForm('id', 'ID', panel);
 	addForm('name', 'Name', panel);
-	addForm('beginDate', 'Begin', panel);
-	addDatePicker('beginDate', 'Date', panel, toolPanel);
-	addForm('endDate', 'End', panel);
-	addDatePicker('endDate', 'Date', panel, toolPanel);
+	addDateField('beginDate', 'Begin', panel);
+	addDateField('endDate', 'End', panel);
 	addSubmitButton('Submit', toolPanel);	
 	addResetButton('Reset', toolPanel);
 	addPagination(toolPanel);
 	loadData();
-	addBox('state', 'State', ['abbr', 'name'], [
-        {"abbr":"AL", "name":"Alabama"},
-        {"abbr":"AK", "name":"Alaska"},
-        {"abbr":"AZ", "name":"Arizona"}
+	addBox('state', 'State', [
+        {"AL" : "Alabama"},
+        {"AK" : "Alaska"},
+        {"AZ" : "Arizona"}
     ], panel);
-	addBox('sex', 'Sex', ['abbr', 'name'], [
-        {"abbr":"M", "name":"Male"},
-        {"abbr":"F", "name":"Female"},
+	addBox('sex', 'Sex', [
+        {"M" : "Male"},
+        {"F" : "Female"}
     ], panel);
 });																																																																																						
 </script>

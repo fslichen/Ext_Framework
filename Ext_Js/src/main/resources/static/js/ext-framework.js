@@ -1,19 +1,54 @@
-function addBox(id, label, valueAndDisplayField, valueAndDisplayData, panel) {
+var LABEL_WIDTH = 64;
+var LABEL_STYLE = 'font-size: 16px;';
+var LABEL_ALIGN = 'right';
+var COMPONENT_WIDTH = 256;
+	
+function addDateField(id, label, panel) {
+	var dateField = new Ext.form.DateField({
+		xtype : 'datefield',
+		itemId : id,
+		fieldLabel : label,
+		format : 'Y/m/d',
+		labelWidth : LABEL_WIDTH,
+		labelStyle : LABEL_STYLE,
+		labelAlign : LABEL_ALIGN,
+		width : COMPONENT_WIDTH,
+		listeners : {
+			'change' : function(currentObject) {
+				requestData[id] = currentObject.getValue();
+			}
+		}
+	});
+	panel.add(dateField);
+}
+
+function addBox(id, label, keyValuePairs, panel) {
+	complexKeyValuePairs = new Array();
+	for (i in keyValuePairs) {
+		var complexKeyValuePairs;
+		var keyValuePair = keyValuePairs[i];
+		for (var j in keyValuePair) {
+			var complexKeyValuePair = {};
+			complexKeyValuePair['key'] = j;
+			complexKeyValuePair['value'] = keyValuePair[j];
+		}
+		complexKeyValuePairs.push(complexKeyValuePair);
+	}
 	var options = Ext.create('Ext.data.Store', {
-	    fields: valueAndDisplayField,
-	    data : valueAndDisplayData
+	    fields: ['key', 'value'],
+	    data : complexKeyValuePairs
 	});
 	var box = Ext.create('Ext.form.ComboBox', {
 		itemId : id,
-		labelWidth : 64,
-		width : 256,
-        labelAlign : 'right',
-        labelStyle : 'font-size: 16px;',
+		labelWidth : LABEL_WIDTH,
+		width : COMPONENT_WIDTH,
+        labelAlign : LABEL_ALIGN,
+        labelStyle : LABEL_STYLE,
 		fieldLabel : label,
 		store : options,
 		queryMode : 'local',
-		displayField : valueAndDisplayField[1],
-		valueField : valueAndDisplayField[0],
+		valueField : 'key',
+		displayField : 'value',
 		listeners: {
 			select: function(combo, record, index) {
 				requestData[id] = getValue(id);
@@ -120,7 +155,7 @@ function fullHeight() {
 	return viewSize.height;
 }
 
-function addPanel(title, horizontal) {
+function addPanel(title) {
 	var panel = Ext.create('Ext.panel.Panel', {
 	    title : title,
 	    layout: 'column'
@@ -164,12 +199,12 @@ function addTextField(id, label, panel, method) {
         itemId : id,
         autofocus : true,
         enableKeyEvents : true,
-        labelAlign : 'right',
-        labelWidth : 64,
-        labelStyle : 'font-size: 16px;',
-        width : 256,
+        labelAlign : LABEL_ALIGN,
+        labelWidth : LABEL_WIDTH,
+        labelStyle : LABEL_STYLE,
+        width : COMPONENT_WIDTH,
         listeners : {
-        	change : method
+        		change : method
         }
     });
 	panel.add(textField);
